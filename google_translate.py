@@ -7,10 +7,11 @@ from gettk import get_tk
 
 
 class Googletrans:
-    def __init__(self):
+    def __init__(self, proxy: str | None = None):
         self.lock = threading.RLock()
         self.__session = requests.session()
         self.n_session_use = 0
+        self.proxy = proxy
         self.__new_session()
 
     def __new_session(self) -> None:
@@ -33,6 +34,11 @@ class Googletrans:
             session = requests.session()
             session.headers["User-Agent"] = user_agent
             session.headers["referer"] = referer
+
+            # 配置代理设置
+            if self.proxy:
+                proxies = {"http": self.proxy, "https": self.proxy}
+                session.proxies.update(proxies)
 
             # 尝试访问Google翻译页面以获取Cookies
             try:
@@ -107,5 +113,5 @@ class Googletrans:
 
 
 if __name__ == "__main__":
-    translate = Googletrans()
+    translate = Googletrans(proxy="http://127.0.0.1:7890")
     print(translate("hello", tl="zh-CN"))
