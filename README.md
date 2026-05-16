@@ -1,123 +1,150 @@
-# google翻译API
-免费的Google Translate API
+**一个免费的Google翻译Python接口库，通过直接调用Google翻译网页版服务实现文本翻译功能**
 
-## 特点
-- 自动访问[google翻译](https://translate.google.cn 'google翻译')
-- 自动计算tk值  
-- 自动更换cookies  
-- 无限制快速访问
-- 自动检测语言
+---
 
-## 使用例子
+## 📋 目录
+
+- [项目简介](#-项目简介)
+- [核心特性](#-核心特性)
+- [安装指南](#-安装指南)
+- [快速开始](#-快速开始)
+- [API文档](#-api文档)
+- [支持的语言](#-支持的语言)
+- [技术实现](#-技术实现)
+- [常见问题](#-常见问题)
+- [测试](#-测试)
+
+---
+
+## 🌟 项目简介
+
+本项目提供了一个简单易用的Google翻译API封装，绕过官方API的成本和配额限制。它自动处理反爬机制（如tk参数生成、cookies管理），支持多种语言互译，适合需要批量翻译或自动化翻译的场景。
+
+### 为什么选择本项目？
+
+- 💰 **完全免费**：无需API密钥，无使用配额限制
+- 🚀 **开箱即用**：简洁的API设计，几行代码即可实现翻译功能
+- 🔒 **智能防护**：自动处理反爬机制，降低IP封禁风险
+- 🌍 **多语言支持**：支持超过100种语言的互译
+- ⚡ **高性能**：会话复用机制，减少连接开销
+
+---
+
+## ✨ 核心特性
+
+- ✅ **完全免费**：无需API密钥，无使用配额限制
+- ✅ **自动计算tk值**：内置tk令牌生成算法，自动处理Google翻译的动态验证
+- ✅ **智能会话管理**：自动更换cookies避免IP封禁，每50次请求自动重建会话
+- ✅ **多线程安全**：使用线程锁保证并发访问的安全性
+- ✅ **自动语言检测**：支持源语言自动识别
+- ✅ **代理支持**：可配置HTTP/HTTPS代理，增强访问灵活性
+- ✅ **广泛的语言支持**：支持超过100种语言的互译
+- ✅ **响应格式兼容**：同时支持新旧两种Google翻译API响应格式
+- ✅ **错误处理完善**：提供详细的异常信息和错误提示
+
+---
+
+## 📦 安装指南
+
+### 系统要求
+
+- **Python 3.10+**（代码使用了Python 3.10的联合类型注解语法 `str | None`）
+- uv包管理器（推荐，需要Python 3.8+）
+- 网络连接（可访问Google翻译服务）
+
+### 使用uv安装
+
 ```
+# Google Translate API
+
+一个免费的Google翻译Python接口库，通过直接调用Google翻译网页版服务实现文本翻译功能。
+
+## 特性
+
+- 💰 完全免费，无需API密钥
+- 🚀 开箱即用，简洁的API设计
+- 🔒 自动处理反爬机制（tk参数、cookies管理）
+- 🌍 支持100+种语言互译
+- ⚡ 会话复用，高性能
+
+## 安装与使用
+
+```bash
+# 运行项目
+uv run python -c "from google_translate import Googletrans; translate = Googletrans(); print(translate('hello', tl='zh-CN'))"
+```
+
+## 快速开始
+
+### 基本用法
+
+```python
+from google_translate import Googletrans
+
+# 创建翻译实例
 translate = Googletrans()
-print(translate('hello', tl='zh-CN'))
-``` 
+
+# 翻译文本（默认翻译为简体中文）
+result = translate('hello', tl='zh-CN')
+print(result)  # 输出: 你好
+
+# 指定源语言和目标语言
+result = translate('Bonjour', sl='fr', tl='en')
+print(result)  # 输出: Hello
+```
+
+### 使用代理
+
+```python
+from google_translate import Googletrans
+
+# 配置代理服务器
+translate = Googletrans(proxy="http://127.0.0.1:7890")
+result = translate('hello world', tl='zh-CN')
+print(result)
+```
+
+## API文档
+
+### Googletrans类
+
+**初始化：**
+```python
+Googletrans(proxy: str | None = None)
+```
+- `proxy`: 代理服务器地址，如 `"http://host:port"`
+
+**翻译方法：**
+```python
+translate(q: str, sl: str = "auto", tl: str = "zh-CN", **kwargs) -> str
+```
+- `q`: 需要翻译的文本
+- `sl`: 源语言代码，默认`"auto"`自动检测
+- `tl`: 目标语言代码，默认`"zh-CN"`（简体中文）
+- `**kwargs`: 传递给`requests.get()`的额外参数
 
 ## 支持的语言
-sq/阿尔巴尼亚语  
-ar/阿拉伯语  
-am/阿姆哈拉语  
-az/阿塞拜疆语  
-ga/爱尔兰语  
-et/爱沙尼亚语  
-eu/巴斯克语  
-be/白俄罗斯语  
-bg/保加利亚语  
-is/冰岛语  
-pl/波兰语  
-bs/波斯尼亚语  
-fa/波斯语  
-af/布尔语(南非荷兰语)  
-da/丹麦语  
-de/德语  
-ru/俄语  
-fr/法语  
-tl/菲律宾语  
-fi/芬兰语  
-fy/弗里西语  
-km/高棉语  
-ka/格鲁吉亚语  
-gu/古吉拉特语  
-kk/哈萨克语  
-ht/海地克里奥尔语  
-ko/韩语  
-ha/豪萨语  
-nl/荷兰语  
-ky/吉尔吉斯语  
-gl/加利西亚语  
-ca/加泰罗尼亚语  
-cs/捷克语  
-kn/卡纳达语  
-co/科西嘉语  
-hr/克罗地亚语  
-ku/库尔德语  
-la/拉丁语  
-lv/拉脱维亚语  
-lo/老挝语  
-lt/立陶宛语  
-lb/卢森堡语  
-ro/罗马尼亚语  
-mg/马尔加什语  
-mt/马耳他语  
-mr/马拉地语  
-ml/马拉雅拉姆语  
-ms/马来语  
-mk/马其顿语  
-mi/毛利语  
-mn/蒙古语  
-bn/孟加拉语  
-my/缅甸语  
-hmn/苗语  
-xh/南非科萨语  
-zu/南非祖鲁语  
-ne/尼泊尔语  
-no/挪威语  
-pa/旁遮普语  
-pt/葡萄牙语  
-ps/普什图语  
-ny/齐切瓦语  
-ja/日语  
-sv/瑞典语  
-sm/萨摩亚语  
-sr/塞尔维亚语  
-st/塞索托语  
-si/僧伽罗语  
-eo/世界语  
-sk/斯洛伐克语  
-sl/斯洛文尼亚语  
-sw/斯瓦希里语  
-gd/苏格兰盖尔语  
-ceb/宿务语  
-so/索马里语  
-tg/塔吉克语  
-te/泰卢固语  
-ta/泰米尔语  
-th/泰语  
-tr/土耳其语  
-cy/威尔士语  
-ur/乌尔都语  
-uk/乌克兰语  
-uz/乌兹别克语  
-es/西班牙语  
-iw/希伯来语  
-el/希腊语  
-haw/夏威夷语  
-sd/信德语  
-hu/匈牙利语  
-sn/修纳语  
-hy/亚美尼亚语  
-ig/伊博语  
-it/意大利语  
-yi/意第绪语  
-hi/印地语  
-su/印尼巽他语  
-id/印尼语  
-jw/印尼爪哇语  
-en/英语  
-yo/约鲁巴语  
-vi/越南语  
-zh-TW/中文(繁体)  
-zh-CN/中文(简体)
 
+主要语言：en(英语), zh-CN(简体中文), zh-TW(繁体中文), ja(日语), ko(韩语), fr(法语), de(德语), es(西班牙语), ru(俄语), ar(阿拉伯语)等100+种语言。
 
+完整列表请参考 [Google Translate 支持的语言](https://cloud.google.com/translate/docs/languages)。
+
+## 注意事项
+
+- 需要 Python 3.10+
+- 由于使用非官方API，存在法律和稳定性风险
+- 建议控制请求频率，避免IP被封禁
+- 不建议在商业项目中直接使用
+
+## 测试
+
+```bash
+# 运行所有测试
+uv run pytest
+
+# 运行单元测试
+uv run pytest -m "not integration"
+
+# 生成覆盖率报告
+uv run pytest --cov=google_translate --cov-report=html
+```
